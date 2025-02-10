@@ -18,6 +18,7 @@ const connectToDatabase = async (retries = 5, delay = 5000) => {
           id SERIAL PRIMARY KEY,
           title VARCHAR(255) NOT NULL,
           content TEXT,
+          user_id INT NOT NULL,
           created_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP
         );
       `);
@@ -42,8 +43,8 @@ connectToDatabase().then(db => {
 
   // Create a new post
   app.post("/create", (req, res) => {
-    const { title, content } = req.body;
-    db.none("INSERT INTO posts(title, content) VALUES($1, $2)", [title, content])
+    const { title, content, user_id } = req.body;
+    db.none("INSERT INTO posts(title, content, user_id) VALUES($1, $2, $3)", [title, content, user_id])
       .then(() => {
         res.status(201).json({ message: "Post created successfully" });
       })
@@ -66,8 +67,8 @@ connectToDatabase().then(db => {
   // Update a post
   app.put("/post/:id", (req, res) => {
     const { id } = req.params;
-    const { title, content } = req.body;
-    db.none("UPDATE posts SET title=$1, content=$2 WHERE id=$3", [title, content, id])
+    const { title, content, user_id } = req.body;
+    db.none("UPDATE posts SET title=$1, content=$2, user_id=$3 WHERE id=$4", [title, content, user_id, id])
       .then(() => {
         res.status(200).json({ message: "Post updated successfully" });
       })
