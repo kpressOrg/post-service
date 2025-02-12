@@ -103,12 +103,9 @@ connectToDatabase().then(db => {
         });
 
         // Update a post
-        app.put("/post/:id", (req, res) => {
+        app.patch("/post/:id", (req, res) => {
           const { id } = req.params;
           const { title, content, user_id } = req.body;
-          if (!title || !content || !user_id) {
-            return res.status(400).json({ error: "Title, content and user_id are required" });
-          }
           db.none("UPDATE posts SET title=$1, content=$2, user_id=$3 WHERE id=$4", [title, content, user_id, id])
             .then(() => {
               res.status(200).json({ message: "Post updated successfully" });
