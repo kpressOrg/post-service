@@ -42,7 +42,7 @@ services:
       context: .
       dockerfile: Dockerfile.prod
     ports:
-      - "3031:3031"
+      - "3032:3032"
     depends_on:
       kpress-db-post:
         condition: service_healthy
